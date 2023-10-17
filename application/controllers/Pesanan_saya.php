@@ -85,13 +85,29 @@ class Pesanan_saya extends CI_Controller
 
 	public function cod($id_bayar)
 	{
-		$data = array(
-			'id_bayar' => $id_bayar,
-			'status' => 6
-		);
-		$this->m_pembayaran->update_admin($data);
-		$this->session->set_flashdata('pesan', 'Data Berhasil Di Update');
-		redirect('pesanan_saya');
+		$this->form_validation->set_rules('status', 'Status', 'required', array('required' => '%s Mohon Untuk Diisi!!!'));
+		if ($this->form_validation->run() == TRUE) {
+			$config['upload_path'] = './assets/bukti_bayar';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg|ico';
+			$config['max_size']     = '2000';
+			$this->upload->initialize($config);
+			$field_name = "bukti_bayar";
+			if (!$this->upload->do_upload($field_name)) {
+			} else {
+				$upload_data = array('uploads' => $this->upload->data());
+				$config['image_library'] = 'gd2';
+				$config['source_image'] = './assets/bukti_bayar' . $upload_data['uploads']['file_name'];
+				$this->load->library('image_lib', $config);
+				$data = array(
+					'id_bayar' => $id_bayar,
+					'status' => $this->input->post('status'),
+					'bukti_bayar' => $upload_data['uploads']['file_name'],
+				);
+				$this->m_pembayaran->update_admin($data);
+				$this->session->set_flashdata('pesan', 'Data Berhasil Di Update');
+				redirect('pesanan_saya');
+			}
+		}
 	}
 
 	public function detail_selesai($no_boking)

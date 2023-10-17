@@ -125,13 +125,26 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
+				<?php echo form_open_multipart('pesanan_saya/cod/' . $value->id_bayar) ?>
 				<div class="modal-body">
 					<p>Apakah Anda Yakin Akan Bayar COD/Ditempat ???</p>
+					<br>
+
+					<input type="text" name="status" value="6" class="form-control" hidden>
+					<div class="form-group">
+						<label>UploadBukti Bayar</label>
+						<div class="custom-file">
+							<input type="file" class="custom-file-input" name="bukti_bayar">
+							<label class="custom-file-label" for="customFile">Choose file</label>
+						</div>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
-					<a href="<?= base_url('pesanan_saya/cod/' . $value->id_bayar) ?>" class="btn btn-primary">Ya</a>
+					<!-- <a href="<?= base_url('pesanan_saya/cod/' . $value->id_bayar) ?>" class="btn btn-primary">Ya</a> -->
+					<button type="submit" class="btn btn-primary">Ya</button>
 				</div>
+				<?php echo form_close() ?>
 			</div>
 		</div>
 	</div>
